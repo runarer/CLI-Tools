@@ -5,7 +5,7 @@ string searchPattern = String.Empty;
 if(args.Length == 2)
     searchPattern = args[1];
 
-var content = GetDirectoryContent(path,searchPattern);
+var content = Directory.EnumerateFileSystemEntries(path,searchPattern,SearchOption.TopDirectoryOnly);
 DeleteListed(content);
 
 return 0;
@@ -33,7 +33,14 @@ static List<string> GetDirectoryContent(string path, string searchPattern)
     return content;
 }
 
-static void DeleteListed(List<string> list)
+bool ParseArguments(string[] args, Dictionary<string,char> attributes)
+{
+
+
+    return true;
+}
+
+static void DeleteListed(IEnumerable<string> list)
 {
     // list.Reverse();
     foreach(string s in Enumerable.Reverse(list) )
@@ -41,3 +48,4 @@ static void DeleteListed(List<string> list)
         Console.WriteLine(s);
     }
 }
+
