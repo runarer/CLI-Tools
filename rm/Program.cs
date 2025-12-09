@@ -1,12 +1,23 @@
 ﻿using System.Linq;
 using System.Text;
-string path = args[0];
-string searchPattern = String.Empty;
 
-if(args.Length == 2)
-    searchPattern = args[1];
+Dictionary<char,string> d1 = new(){ {'h',"hei"},{'d',"deg"},{'D',"de"},{'m',"meg"}};
+CommandLineArguments cm;
+try {
+    cm = CommandLineArguments.ParseArguments(args,d1);
+} catch(Exception ex)
+{
+    Console.WriteLine(ex.Message);
+    return 2;
+}
 
-var content = Directory.EnumerateFileSystemEntries(path,searchPattern,SearchOption.TopDirectoryOnly);
+if(cm.Paths.Length < 1 )
+{
+    PrintUsage();
+    return 0;
+}
+
+var content = Directory.EnumerateFileSystemEntries(cm.Paths[0],cm.SearchPatterns[0],SearchOption.TopDirectoryOnly);
 DeleteListed(content);
 
 return 0;
@@ -20,26 +31,41 @@ static void DeleteListed(IEnumerable<string> list)
     }
 }
 
-class CommandLineArguments(Dictionary<string,char> attributes)
+static void PrintUsage()
 {
-    public List<string> Paths {private set; get; } = [];
-    public string SearchPattern {private set; get; } = string.Empty;
-    public string Arguments {private set; get; } = string.Empty;
+    Console.WriteLine($"Usage: {System.Diagnostics.Process.GetCurrentProcess().ProcessName} <arguments> <searchPattern> <filenames ..>");
+}
 
-    private Dictionary<string,char> _attributes = attributes;
+class CommandLineArguments
+{
+    public string[] Paths {private set; get; } = [];
+    public string[] SearchPatterns {private set; get; } = [];
+    public string[] Arguments {private set; get; } = [];
 
-    public bool ParseArguments(string[] args)
+
+    static public CommandLineArguments ParseArguments(string[] args, Dictionary<char,string> _attributes)
     {
-        StringBuilder shortForm = new(10);
+        HashSet<string> files = [];
+        HashSet<string> searchPatterns = [];
+        HashSet<string> arguments = [];
+
+        CommandLineArguments cm = new();
+        if(args.Length < 1)
+            return cm;
+
         foreach(string arg in args)
         {
             if(arg.StartsWith("--"))
             {
                 if(arg.Length == 2)
                     throw new Exception("-- lacks an argument");
-                if(_attributes.Keys.Contains(arg[2..]))
+                if(_attributes.Values.Contains(arg[2..]))
                 {
-                   shortForm.Append(_attributes[arg[2..]]); 
+                    if(arguments.Contains(arg[2..])) {
+                        char value = _attributes.First( v => v.Value == arg).Key;
+                        throw new Exception($"Argument {arg} already used, another --{arg} or  -{value} ");
+                    }
+                   arguments.Add(arg[2..]); 
                 } else
                 {
                     throw new Exception($"Unknown verbose argument {arg}");
@@ -54,34 +80,47 @@ class CommandLineArguments(Dictionary<string,char> attributes)
                 // shortform arguments
                 foreach(char a in arg[1..])
                 {
-                    if(!_attributes.Values.Contains(a))
+                    if(!_attributes.Keys.Contains(a))
                     {
-                        throw new Exception($"Unknown short form argument {a}");
+                        throw new Exception($"Unknown short form argument {a} in {arg}, should it be --{args}?");
                     }
+                    if(arguments.Contains(_attributes[a]))
+                        throw new Exception($"Argument {a} in {arg} already use, --{_attributes[a]} or another -{a} ");
+                    arguments.Add(_attributes[a]);
                 }
-                shortForm.Append(arg[1..]);
+                
     
             }
             else if(arg.Contains('?') || arg.Contains('*'))
             {
-                // search pattern
-                if(SearchPattern != string.Empty)
-                {
-                    SearchPattern = arg;
-                }
-                else
-                {
-                    throw new Exception($"More than one search pattern found: {SearchPattern} and {arg}");
-                }
+                    searchPatterns.Add(arg);
             }
             else
             {
                 // Assumed filename
-                Paths.Add(arg);
+                files.Add(arg);
             }
         }
 
-        Arguments = shortForm.ToString();
-        return true;
+        // Changes to array for
+        cm.Paths = [..files];
+        cm.SearchPatterns = [..searchPatterns]; 
+        cm.Arguments = [..arguments];
+        return cm;
+    }
+    public override string ToString()
+    {
+        StringBuilder sb = new(100);
+        foreach(string path in Paths)
+        {
+            sb.Append($"\nFile: {path}");
+        }
+        foreach(string serarchPattern in SearchPatterns)
+            sb.Append($"\nSearchpattern: {SearchPatterns}");
+        foreach(string argument in Arguments)
+        {
+            sb.Append($"\nArgument: {argument}");
+        }
+        return sb.ToString();
     }
 }
