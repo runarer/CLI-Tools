@@ -12,17 +12,24 @@ else
 
 if(!Directory.Exists(path))
 {
+    
     // Could be an argument like -l
     //If file doesn't exist it could be a searchPattern like *.txt
     searchPattern = args[0];
     path = Directory.GetCurrentDirectory();
 }
 
-string[] directoryContent = Directory.GetFiles(path,searchPattern);
+string[] directoriesInPath = Directory.GetDirectories(path);
+string[] filesInDirectory = Directory.GetFiles(path,searchPattern);
 
-foreach (string name in directoryContent)
-{
-    Console.WriteLine("- " + name);
-}
+printContent(directoriesInPath);
+printContent(filesInDirectory);
 
 return 0;
+
+
+static void printContent(string[] content)
+{
+    foreach(string c in content)
+        Console.WriteLine(c);
+}
