@@ -1,7 +1,8 @@
-﻿using System.Linq;
+﻿
+using System.Linq;
 using System.Text;
 
-Dictionary<char,string> d1 = new(){ {'h',"hei"},{'d',"deg"},{'D',"de"},{'m',"meg"}};
+Dictionary<char,string> d1 = new(){ {'r',"recursive"},{'v',"verbose"},{'p',"print"}};
 CommandLineArguments cm;
 try {
     cm = CommandLineArguments.ParseArguments(args,d1);
@@ -16,18 +17,32 @@ if(cm.Paths.Length < 1 )
     PrintUsage();
     return 0;
 }
+SearchOption searchOption = SearchOption.TopDirectoryOnly;
+if (cm.Arguments.Contains("recursive"))
+    searchOption = SearchOption.AllDirectories;
 
-var content = Directory.EnumerateFileSystemEntries(cm.Paths[0],cm.SearchPatterns[0],SearchOption.TopDirectoryOnly);
-DeleteListed(content);
+IEnumerable<string> content;
+if(cm.SearchPatterns.Length < 1 )
+{
+    content = Directory.EnumerateFileSystemEntries(cm.Paths[0],"",searchOption);
+} else
+{
+    content = Directory.EnumerateFileSystemEntries(cm.Paths[0],cm.SearchPatterns[0],searchOption);    
+}
+
+DeleteListed(content,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
 
 return 0;
 
-static void DeleteListed(IEnumerable<string> list)
+static void DeleteListed(IEnumerable<string> list,bool onlyPrint, bool verbose)
 {
     // list.Reverse();
     foreach(string s in Enumerable.Reverse(list) )
     {
-        Console.WriteLine(s);
+        if(onlyPrint || verbose)
+            Console.WriteLine(s);
+        if(!onlyPrint)
+            Console.WriteLine("Replace me with delete command" + s);
     }
 }
 
