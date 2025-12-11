@@ -1,4 +1,5 @@
-﻿using CLIToolsCommon;
+﻿using System.ComponentModel.Design;
+using CLIToolsCommon;
 
 if(args.Length == 0)
 {
@@ -9,35 +10,52 @@ if(args.Length == 0)
 CommandLineArguments cm;
 try
 {
-    Dictionary<char,string> validArguments = new(){ {'L',"logical"},{'P',"physical"},{'h',"help"},{'v',"version"}};
+    Dictionary<char,string> validArguments = new(){{'h',"help"}};
     cm = new(args,validArguments);
 } catch(Exception ex)
 {
     Console.WriteLine(ex);
-}
-
-string filename = args[0];
-
-if(File.Exists(filename))
-{
-    Console.WriteLine("File allready Exisit");
     return 1;
 }
 
-try
+if(cm.Arguments.Contains("help"))
 {
-    File.Create(args[0]);
-} catch (Exception ex)
-{
-    Console.WriteLine(ex.Message);
-    return 1;
+    Help();
+    return 0;
 }
 
-return 0;
+int error = 0;
+
+foreach(string path in cm.Paths) {
+    if(File.Exists(path))
+    {
+        Console.WriteLine($"File {path} allready Exisit");
+        error = 1;
+        continue;
+    }
+
+    try
+    {
+        File.Create(path);
+    } catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+        error = 2;
+        continue;
+    }
+}
+
+return error;
 
 
 static void Usage()
 {
-        Console.WriteLine("Usage: touch filename");
+        Console.WriteLine("Usage: touch [--help|-h] filenames");
+}
 
+static void Help()
+{
+    Console.WriteLine("This program creates new files");
+    Usage();
+    Console.WriteLine("-h --help\tPrint this");  
 }
