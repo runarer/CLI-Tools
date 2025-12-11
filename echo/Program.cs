@@ -28,6 +28,7 @@ if(newLineAtEnd)
     Console.WriteLine(output);
 else
     Console.Write(output);
+
 return 0;
 
 
