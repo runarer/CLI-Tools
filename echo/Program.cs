@@ -1,13 +1,10 @@
 ﻿
-string output;
+string output = String.Empty;
 
 bool newLineAtEnd = true;
 
 // Check for arguments
-if (args.Length == 0) {
-    output = "\n";
-} else
-{
+if (args.Length > 0) {
     int start = 0;
     if(args[0].StartsWith('-'))
     {
