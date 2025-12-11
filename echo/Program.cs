@@ -1,6 +1,4 @@
 ﻿
-using System.Security.Cryptography.X509Certificates;
-
 string output;
 
 bool newLineAtEnd = true;
