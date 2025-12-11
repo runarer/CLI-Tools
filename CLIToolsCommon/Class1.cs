@@ -43,7 +43,7 @@ public class CommandLineArguments
                 {
                     if(!_allowedArguments.Keys.Contains(a))
                     {
-                        throw new Exception($"Unknown short form argument {a} in {arg}, should it be --{args}?");
+                        throw new Exception($"Unknown short form argument {a} in {arg}");
                     }
                     if(Arguments.Contains(_allowedArguments[a]))
                         throw new Exception($"Argument {a} in {arg} already use, --{_allowedArguments[a]} or another -{a} ");
@@ -63,6 +63,7 @@ public class CommandLineArguments
             }
         }
     }
+
     public override string ToString()
     {
         StringBuilder sb = new(100);
@@ -71,7 +72,7 @@ public class CommandLineArguments
             sb.Append($"\nFile: {path}");
         }
         foreach(string serarchPattern in SearchPatterns)
-            sb.Append($"\nSearchpattern: {SearchPatterns}");
+            sb.Append($"\nSearchpattern: {serarchPattern}");
         foreach(string argument in Arguments)
         {
             sb.Append($"\nArgument: {argument}");

@@ -1,7 +1,19 @@
-﻿if(args.Length == 0)
+﻿using CLIToolsCommon;
+
+if(args.Length == 0)
 {
-    Console.WriteLine("Usage: touch filename");
+    Usage();
     return 0;
+}
+
+CommandLineArguments cm;
+try
+{
+    Dictionary<char,string> validArguments = new(){ {'L',"logical"},{'P',"physical"},{'h',"help"},{'v',"version"}};
+    cm = new(args,validArguments);
+} catch(Exception ex)
+{
+    Console.WriteLine(ex);
 }
 
 string filename = args[0];
@@ -22,3 +34,10 @@ try
 }
 
 return 0;
+
+
+static void Usage()
+{
+        Console.WriteLine("Usage: touch filename");
+
+}

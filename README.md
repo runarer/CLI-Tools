@@ -11,12 +11,16 @@ h display help
 n removes newline at end for git terminal.
 
 ## cat
-
+Use: cat [-nBsE|h] [--number|--number-nonblank|--squeeze-blank|--show-ends|--help] filenames
 
 ## ls
 
 ## pwd
+Use: pwd [-v|h|L|P] [--version|help|logical|physical]
+
+default is logical, physical is not tested yet.
 
 ## rm
+
 
 ## touch
