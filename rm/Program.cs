@@ -29,21 +29,35 @@ if (cm.Arguments.Contains("recursive"))
     searchOption = SearchOption.AllDirectories;
 
 List<string> content = [];
+List<string> files = [];
+List<string> directories = [];
 
 foreach(string path in cm.Paths)
 {
     if (File.Exists(path))
     {
-        content.Add(path);
+        files.Add(path);
     } 
     else if (Directory.Exists(path)) 
     {
-        content.AddRange(Directory.EnumerateFileSystemEntries(path,"",searchOption));
+       foreach(string subPath in Directory.EnumerateFileSystemEntries(path,"",searchOption) )
+        {
+            if(File.Exists(subPath))
+            {
+                files.Add(subPath);    
+            } 
+            else if(Directory.Exists(subPath))
+            {
+                directories.Add(subPath);
+            }
+        }
     }
 }
 
 
-DeleteListed(content,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
+DeleteListed(files,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
+DeleteListed(directories,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
+
 
 return 0;
 
@@ -52,10 +66,36 @@ static void DeleteListed(IEnumerable<string> list,bool onlyPrint, bool verbose)
     // list.Reverse();
     foreach(string s in Enumerable.Reverse(list) )
     {
+        string path = Path.GetFullPath(s);
         if(onlyPrint || verbose)
             Console.WriteLine(s);
         if(!onlyPrint)
             Console.WriteLine("Replace me with delete command" + s);
+    }
+}
+
+static void DeleteFile(string path, Action<string> action, bool onlyPrint,bool verbose)
+{
+    string fullPath = Path.GetFullPath(path);
+    if(onlyPrint || verbose)
+        Console.WriteLine(fullPath);
+    if(!onlyPrint)
+        Console.WriteLine("Replace me with delete command" + fullPath);
+    try
+    {
+        action(fullPath);
+    } 
+    catch (IOException)
+    {
+        Console.WriteLine($"{path} does not exists");
+    }
+    catch (UnauthorizedAccessException)
+    {
+        Console.WriteLine($"{path} you don't have access");
+    } catch(Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+        Environment.Exit(3);
     }
 }
 
