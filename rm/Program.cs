@@ -75,8 +75,14 @@ static void DeleteFile(string path, bool onlyPrint,bool verbose)
 static void DeleteDirectory(string path, bool recursive, bool onlyPrint,bool verbose)
 {
     string fullPath = Path.GetFullPath(path);
-    if(onlyPrint || verbose)
+    if(onlyPrint || verbose) {        
         Console.WriteLine(fullPath);
+        if(recursive)
+        {
+            foreach(string subpath in Directory.EnumerateFileSystemEntries(fullPath,"",SearchOption.AllDirectories))
+                Console.WriteLine(subpath);
+        }
+    }    
     if(!onlyPrint) {
         try
         {
