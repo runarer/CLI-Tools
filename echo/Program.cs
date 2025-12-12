@@ -40,7 +40,7 @@ static void InvalidArgument(char c)
 }
 
 static void Usage() {
-    Console.WriteLine($"{System.Diagnostics.Process.GetCurrentProcess().ProcessName} -[enh] <your text");
+    Console.WriteLine($"echo -[enh] <your text");
 }
 
 static void HelpText()
