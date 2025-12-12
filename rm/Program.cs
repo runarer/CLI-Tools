@@ -28,15 +28,20 @@ SearchOption searchOption = SearchOption.TopDirectoryOnly;
 if (cm.Arguments.Contains("recursive"))
     searchOption = SearchOption.AllDirectories;
 
-IEnumerable<string> content;
+List<string> content = [];
 
-if(cm.SearchPatterns.Count < 1 )
+foreach(string path in cm.Paths)
 {
-    content = Directory.EnumerateFileSystemEntries(cm.Paths[0],"",searchOption);
-} else
-{
-    content = Directory.EnumerateFileSystemEntries(cm.Paths[0],cm.SearchPatterns[0],searchOption);    
+    if (File.Exists(path))
+    {
+        content.Add(path);
+    } 
+    else if (Directory.Exists(path)) 
+    {
+        content.AddRange(Directory.EnumerateFileSystemEntries(path,"",searchOption));
+    }
 }
+
 
 DeleteListed(content,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
 
@@ -56,7 +61,7 @@ static void DeleteListed(IEnumerable<string> list,bool onlyPrint, bool verbose)
 
 static void Usage()
 {
-    Console.WriteLine($"Usage: {System.Diagnostics.Process.GetCurrentProcess().ProcessName} <arguments> <searchPattern> <filenames ..>");
+    Console.WriteLine($"Usage: rm <arguments> <searchPattern> <filenames ..>");
 }
 
 static void Help()
