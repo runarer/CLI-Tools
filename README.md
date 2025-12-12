@@ -21,6 +21,7 @@ Use: pwd [-v|h|L|P] [--version|help|logical|physical]
 default is logical, physical is not tested yet.
 
 ## rm
-
+Use: rm [-rvp|h] [--help|verbose|print|recursive] files|directories
 
 ## touch
+Use: touch [-h|--help] filenames
