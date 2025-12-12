@@ -4,9 +4,6 @@ using CLIToolsCommon;
 Dictionary<char,string> d1 = new(){ {'h',"help"},{'r',"recursive"},{'v',"verbose"},{'p',"print"}};
 CommandLineArguments cm;
 
-string rawArgs = System.Environment.CommandLine;
-Console.WriteLine(rawArgs);
-
 try {
     cm = new(args,d1);
 } catch(Exception ex)
@@ -32,7 +29,7 @@ if (cm.Arguments.Contains("recursive"))
     searchOption = SearchOption.AllDirectories;
 
 IEnumerable<string> content;
-// Initialize with first combo
+
 if(cm.SearchPatterns.Count < 1 )
 {
     content = Directory.EnumerateFileSystemEntries(cm.Paths[0],"",searchOption);
@@ -40,17 +37,6 @@ if(cm.SearchPatterns.Count < 1 )
 {
     content = Directory.EnumerateFileSystemEntries(cm.Paths[0],cm.SearchPatterns[0],searchOption);    
 }
-foreach(var path in cm.Paths[1..])
-{
-    if(cm.SearchPatterns.Count > 0) {
-        foreach(var pattern in cm.SearchPatterns)
-        {
-            _ = content.Union(Directory.EnumerateFileSystemEntries(path, pattern, searchOption));
-        }
-    }   
-}
-
-Console.WriteLine(cm);
 
 DeleteListed(content,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
 
@@ -81,3 +67,4 @@ static void Help()
     Console.WriteLine("-p --print\t\tDon't delete files but print the names");
     Console.WriteLine("-r --recursive\t\tDelete files in subdirectories");
 }
+
