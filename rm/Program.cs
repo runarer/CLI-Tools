@@ -1,7 +1,7 @@
 ﻿
 using CLIToolsCommon;
 
-Dictionary<char,string> d1 = new(){ {'r',"recursive"},{'v',"verbose"},{'p',"print"}};
+Dictionary<char,string> d1 = new(){ {'h',"help"},{'r',"recursive"},{'v',"verbose"},{'p',"print"}};
 CommandLineArguments cm;
 try {
     cm = new(args,d1);
@@ -13,9 +13,16 @@ try {
 
 if(cm.Paths.Count < 1 )
 {
-    PrintUsage();
+    Usage();
     return 0;
 }
+
+if(cm.Arguments.Contains("help"))
+{
+    Help();
+    return 0;
+}
+
 SearchOption searchOption = SearchOption.TopDirectoryOnly;
 if (cm.Arguments.Contains("recursive"))
     searchOption = SearchOption.AllDirectories;
@@ -45,7 +52,16 @@ static void DeleteListed(IEnumerable<string> list,bool onlyPrint, bool verbose)
     }
 }
 
-static void PrintUsage()
+static void Usage()
 {
     Console.WriteLine($"Usage: {System.Diagnostics.Process.GetCurrentProcess().ProcessName} <arguments> <searchPattern> <filenames ..>");
+}
+
+static void Help()
+{
+    Usage();
+    Console.WriteLine("-h --help\t\tPrint this message");
+    Console.WriteLine("-v --verbose\t\tPrint names to output");
+    Console.WriteLine("-p --print\t\tDon't delete files but print the names");
+    Console.WriteLine("-r --recursive\t\tDelete files in subdirectories");
 }
