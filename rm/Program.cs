@@ -24,11 +24,6 @@ if(cm.Arguments.Contains("help"))
     return 0;
 }
 
-bool recursive = false;
-if (cm.Arguments.Contains("recursive"))
-    recursive = true;
-
-List<string> content = [];
 List<string> files = [];
 List<string> directories = [];
 
@@ -40,51 +35,27 @@ foreach(string path in cm.Paths)
     } 
     else if (Directory.Exists(path)) 
     {
-        if(recursive) {       
-            foreach(string subPath in Directory.EnumerateFileSystemEntries(path,"",SearchOption.AllDirectories) )
-            {
-                if(File.Exists(subPath))
-                    files.Add(subPath);    
-                 else if(Directory.Exists(subPath))
-                    directories.Add(subPath);
-            }
-        }
-        else
-            directories.Add(path);
+        directories.Add(path);
     }
 }
 
 foreach(string path in files)
-    DeletePath(path,File.Delete,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
+    DeleteFile(path,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
 
 foreach(string path in directories)
-    DeletePath(path,Directory.Delete,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
+    DeleteDirectory(path,cm.Arguments.Contains("recursive"),cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
 
 return 0;
 
-// static void DeleteListed(IEnumerable<string> list,bool onlyPrint, bool verbose)
-// {
-//     // list.Reverse();
-//     foreach(string s in Enumerable.Reverse(list) )
-//     {
-//         string path = Path.GetFullPath(s);
-//         if(onlyPrint || verbose)
-//             Console.WriteLine(s);
-//         if(!onlyPrint)
-//             Console.WriteLine("Replace me with delete command" + s);
-//     }
-// }
-
-static void DeletePath(string path, Action<string> action, bool onlyPrint,bool verbose)
+static void DeleteFile(string path, bool onlyPrint,bool verbose)
 {
     string fullPath = Path.GetFullPath(path);
     if(onlyPrint || verbose)
         Console.WriteLine(fullPath);
     if(!onlyPrint) {
-        // Console.WriteLine("Replace me with delete command" + fullPath);
         try
         {
-            action(fullPath);
+            File.Delete(fullPath);
         } 
         catch (IOException)
         {
@@ -100,6 +71,32 @@ static void DeletePath(string path, Action<string> action, bool onlyPrint,bool v
         }
     }
 }
+
+static void DeleteDirectory(string path, bool recursive, bool onlyPrint,bool verbose)
+{
+    string fullPath = Path.GetFullPath(path);
+    if(onlyPrint || verbose)
+        Console.WriteLine(fullPath);
+    if(!onlyPrint) {
+        try
+        {
+            Directory.Delete(fullPath,recursive);
+        } 
+        catch (IOException)
+        {
+            Console.WriteLine($"{path} does not exists or can be deleted");
+        }
+        catch (UnauthorizedAccessException)
+        {
+            Console.WriteLine($"{path} you don't have access");
+        } catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Environment.Exit(3);
+        }
+    }
+}
+
 
 static void Usage()
 {
