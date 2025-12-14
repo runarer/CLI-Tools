@@ -1,5 +1,4 @@
 ﻿
-using System.Drawing;
 using System.Text;
 
 string path;
@@ -14,20 +13,9 @@ else
     path = args[0];
 }
 
-if(!Directory.Exists(path))
-{
-    
-    // Could be an argument like -l
-    //If file doesn't exist it could be a searchPattern like *.txt
-    searchPattern = args[0];
-    path = Directory.GetCurrentDirectory();
-}
-
 string[] directoriesInPath = Directory.GetDirectories(path);
 string[] filesInDirectory = Directory.GetFiles(path,searchPattern);
 
-// printContent(directoriesInPath);
-// printContent(filesInDirectory);
 PrintDirectoryContentWide(directoriesInPath);
 PrintDirectoryContentWide(filesInDirectory);
 
