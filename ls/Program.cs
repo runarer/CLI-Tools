@@ -28,6 +28,7 @@ string[] filesInDirectory = Directory.GetFiles(path,searchPattern);
 
 // printContent(directoriesInPath);
 // printContent(filesInDirectory);
+PrintDirectoryContentWide(directoriesInPath);
 PrintDirectoryContentWide(filesInDirectory);
 
 
@@ -51,18 +52,18 @@ static string PrintFileInfo(FileInfo info)
     file = false;
     
     if(file)
-        sb.Append("Dir   ");
-    else
         sb.Append("File  ");
+    else
+        sb.Append("Dir   ");
 
-    sb.Append($"{info.LastAccessTime.Date}  {info.LastAccessTime.TimeOfDay}");
+    sb.Append($"{info.LastAccessTime.Date.ToShortDateString()}  {info.LastAccessTime.ToShortTimeString()}");
     
     if(file)
-        sb.Append($"{info.Length.ToString("NO",new System.Globalization.CultureInfo("fr-FR")),-16}");
+        sb.Append($"{info.Length.ToString("N0",new System.Globalization.CultureInfo("fr-FR")),16}");
     else
         sb.Append(new string(' ',16));
     
-    sb.Append(info.Name);
+    sb.Append($"  {info.Name}");
 
     return sb.ToString();
 }
