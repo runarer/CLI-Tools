@@ -14,18 +14,18 @@ else if(Directory.Exists( args[0]))
 } 
 else
 {
-    Console.WriteLine($"File {args[0]} does not exist");
+    Console.WriteLine($"Directory {args[0]} does not exist");
     return 1;    
 }
 
 // Get directories and files, seperate so we can print dirs first.
-string[] directoriesInPath = Directory.GetDirectories(path);
-string[] filesInDirectory = Directory.GetFiles(path);
+IEnumerable<string> directories = Directory.EnumerateDirectories(path);
+IEnumerable<string> files = Directory.EnumerateFiles(path);
+IEnumerable<string> content = directories.Concat(files);
 
-foreach(string name in directoriesInPath)
-    PrintFileInfoWide(name);
-foreach(string name in filesInDirectory)
-    PrintFileInfoWide(name);
+// Print the content
+foreach(string name in content)
+    Console.WriteLine(PrintFileInfoWide(name));
 
 return 0;
 
@@ -35,16 +35,19 @@ static string PrintFileInfoWide(string path)
     StringBuilder sb =  new ();
     bool file = true;
     
+    // Check if directory
     if ((info.Attributes & FileAttributes.Directory) == FileAttributes.Directory )
-    file = false;
+        file = false;
     
     if(file)
         sb.Append("File  ");
     else
         sb.Append("Dir   ");
 
+    // Date and time for last modification
     sb.Append($"{info.LastAccessTime.Date.ToShortDateString()}  {info.LastAccessTime.ToShortTimeString()}");
     
+    // Size of file, ' ' as separator every 3 digits
     if(file)
         sb.Append($"{info.Length.ToString("N0",new System.Globalization.CultureInfo("fr-FR")),16}");
     else
