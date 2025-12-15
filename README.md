@@ -23,7 +23,8 @@ E for adding '$' at end of line
 
 
 ## ls
-Use: ls
+Use: ls <directory>
+directory is optional.
 
 
 ## pwd
