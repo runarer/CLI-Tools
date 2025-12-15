@@ -2,37 +2,36 @@
 using System.Text;
 
 string path;
-string searchPattern = "";
 
+// Check for arguments
 if(args.Length == 0)
 {
     path =  Directory.GetCurrentDirectory();
 }
-else
+else if(Directory.Exists( args[0]))
 {
     path = args[0];
+} 
+else
+{
+    Console.WriteLine($"File {args[0]} does not exist");
+    return 1;    
 }
 
+// Get directories and files, seperate so we can print dirs first.
 string[] directoriesInPath = Directory.GetDirectories(path);
-string[] filesInDirectory = Directory.GetFiles(path,searchPattern);
+string[] filesInDirectory = Directory.GetFiles(path);
 
-PrintDirectoryContentWide(directoriesInPath);
-PrintDirectoryContentWide(filesInDirectory);
-
+foreach(string name in directoriesInPath)
+    PrintFileInfoWide(name);
+foreach(string name in filesInDirectory)
+    PrintFileInfoWide(name);
 
 return 0;
 
-
-static void PrintDirectoryContentWide(string[] content)
+static string PrintFileInfoWide(string path)
 {
-    foreach(string path in content)
-    {
-        Console.WriteLine(PrintFileInfo(new FileInfo(path)));
-    }
-}
-
-static string PrintFileInfo(FileInfo info)
-{
+    FileInfo info = new(path);
     StringBuilder sb =  new ();
     bool file = true;
     
