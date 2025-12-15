@@ -63,20 +63,4 @@ public class CommandLineArguments
             }
         }
     }
-
-    public override string ToString()
-    {
-        StringBuilder sb = new(100);
-        foreach(string path in Paths)
-        {
-            sb.Append($"\nFile: {path}");
-        }
-        foreach(string serarchPattern in SearchPatterns)
-            sb.Append($"\nSearchpattern: {serarchPattern}");
-        foreach(string argument in Arguments)
-        {
-            sb.Append($"\nArgument: {argument}");
-        }
-        return sb.ToString();
-    }
 }
