@@ -1,11 +1,13 @@
 ﻿using CLIToolsCommon;
 
+// If no arguments, display usage and exit
 if (args.Length < 1)
 {
     Usage();
     return 0;
 }
 
+// Parse commandline input
 CommandLineArguments cm;
 bool number = false;
 bool numberNonBlanks = false;
@@ -41,6 +43,7 @@ try
     return 1;
 }
 
+// Read and print all files
 foreach(string path in cm.Paths)
 {
     string[] lines;
@@ -53,21 +56,24 @@ foreach(string path in cm.Paths)
         return 2;
     }
     
-    bool lastEmpty = false;
+    bool lastEmpty = false; // To keep track of last line being empty for squeeze blank
     foreach(string line in lines) {
-        if(squeezeBlank)
+
+        // Squeeze blank lines
+        if(squeezeBlank && line == "")
             if(lastEmpty)
                 continue;
             else
                 lastEmpty = true;
-        
         lastEmpty = false;
 
+        // Number lines
         if(number)
             if((numberNonBlanks && line != "") || !numberNonBlanks)            
                 Console.Write($"{lineNumber++,-4}");
 
         
+        // Print line and add $ if show ends
         Console.Write(line);
         if(showEnds)
             Console.Write('$');
