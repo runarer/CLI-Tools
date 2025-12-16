@@ -45,7 +45,7 @@ return 0;
 
 static void Help()
 {
-    Console.WriteLine("Usage: pwd [-L|P|h|v] [--argument]");
+    Console.WriteLine("Usage: pwd [-L|P|h] [--argument]");
     Console.WriteLine("Valid Arguments");
     Console.WriteLine("L - logical\t-\tShow logical location (Default)");
     Console.WriteLine("P -physical\t-\tShow physical location");

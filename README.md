@@ -46,7 +46,7 @@ directory is optional.
 
 
 ## pwd
-Use: pwd [-v|h|L|P] [--version|help|logical|physical]
+Use: pwd [-h|L|P] [--help|logical|physical]
 
 v print version
 h print help messsage
