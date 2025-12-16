@@ -5,7 +5,6 @@ namespace CLIToolsCommon;
 public class CommandLineArguments
 {
     public List<string> Paths {private set; get; } = [];
-    public List<string> SearchPatterns {private set; get; } = [];
     public List<string> Arguments {private set; get; } = [];
 
 
@@ -51,10 +50,6 @@ public class CommandLineArguments
                 }
                 
     
-            }
-            else if(arg.Contains('?') || arg.Contains('*'))
-            {
-                    SearchPatterns.Add(arg);
             }
             else
             {
