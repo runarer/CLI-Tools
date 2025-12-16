@@ -120,7 +120,7 @@ static void DeleteDirectory(string path, bool recursive, bool onlyPrint,bool ver
 
 static void Usage()
 {
-    Console.WriteLine($"Usage: rm <arguments> <searchPattern> <filenames ..>");
+    Console.WriteLine($"Usage: rm <arguments> <filenames ..>");
 }
 
 static void Help()
