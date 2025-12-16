@@ -6,7 +6,9 @@ public class CommandLineArguments
     public List<string> Paths {private set; get; } = [];
     public List<string> Arguments {private set; get; } = [];
 
-
+    // args to parse
+    // _allowedArguments is a dictionary of valid arguments
+    // key is short form char, value is long form string
     public CommandLineArguments(string[] args, Dictionary<char,string> _allowedArguments)
     {
         if(args.Length < 1)
