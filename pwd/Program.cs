@@ -1,11 +1,12 @@
 ﻿
 using CLIToolsCommon;
 
+// Parse arguments
 bool physical = false;
 
 if(args.Length > 0)
 {
-    Dictionary<char,string> validArguments = new(){ {'L',"logical"},{'P',"physical"},{'h',"help"},{'v',"version"}};
+    Dictionary<char,string> validArguments = new(){ {'L',"logical"},{'P',"physical"},{'h',"help"}};
     CommandLineArguments cm;
     try{
         cm = new(args, validArguments);
@@ -17,10 +18,6 @@ if(args.Length > 0)
 
     if(cm.Arguments.Contains("help")){
         Help();
-        return 0;
-    }
-    if(cm.Arguments.Contains("version")) {
-        Version();
         return 0;
     }
     if(cm.Arguments.Contains("physical"))
@@ -44,13 +41,6 @@ if(physical) {
 Console.WriteLine(dir);
 return 0;
 
-static void Version()
-{
-    // Can I get version number from project, 
-    // and how to add version to project,
-    // and this code be added to common code, but use version for this project. 
-    Console.WriteLine("Version 0.1 alpha");
-}
 
 static void Help()
 {
@@ -59,5 +49,4 @@ static void Help()
     Console.WriteLine("L - logical\t-\tShow logical location (Default)");
     Console.WriteLine("P -physical\t-\tShow physical location");
     Console.WriteLine("h - help\t-\tDisplay this text.");
-    Console.WriteLine("v - version\t-\tSuspend newline");
 }
