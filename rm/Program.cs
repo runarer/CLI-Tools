@@ -1,6 +1,7 @@
 ﻿
 using CLIToolsCommon;
 
+// Parse commandline input
 Dictionary<char,string> d1 = new(){ {'h',"help"},{'r',"recursive"},{'v',"verbose"},{'p',"print"}};
 CommandLineArguments cm;
 
@@ -12,18 +13,21 @@ try {
     return 2;
 }
 
+// If no input display usage and exit
 if(cm.Paths.Count < 1 )
 {
     Usage();
     return 0;
 }
 
+// User ask for help, display and exit
 if(cm.Arguments.Contains("help"))
 {
     Help();
     return 0;
 }
 
+// From commandling, seperate files and directories
 List<string> files = [];
 List<string> directories = [];
 
@@ -39,6 +43,7 @@ foreach(string path in cm.Paths)
     }
 }
 
+// Delete files and direcories
 foreach(string path in files)
     DeleteFile(path,cm.Arguments.Contains("print"),cm.Arguments.Contains("verbose"));
 
@@ -47,6 +52,10 @@ foreach(string path in directories)
 
 return 0;
 
+// Delete file
+// path is file to delete
+// onlyPrint if no delete
+// verbose for writing files that are to be delete to output
 static void DeleteFile(string path, bool onlyPrint,bool verbose)
 {
     string fullPath = Path.GetFullPath(path);
@@ -72,6 +81,11 @@ static void DeleteFile(string path, bool onlyPrint,bool verbose)
     }
 }
 
+// Delete directory
+// path is directory to delete
+// recursive removes content in subdirectories
+// onlyPrint if no delete
+// verbose for writing files/dierctories that are to be delete to output
 static void DeleteDirectory(string path, bool recursive, bool onlyPrint,bool verbose)
 {
     string fullPath = Path.GetFullPath(path);
