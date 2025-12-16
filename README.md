@@ -19,7 +19,7 @@ first one probably the best match for small CLI programs without much imput.
 
 
 For a program like `ls` there are a lot of options for showing information
-about files.
+about files. Can create different view and turn of and on different infomation.
 
 ## echo
 Some echos seperate on space and put each on its own line,
