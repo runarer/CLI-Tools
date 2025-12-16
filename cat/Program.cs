@@ -36,6 +36,8 @@ try
     }    
     if(cm.Arguments.Contains("show-ends"))
         showEnds = true;
+    if(cm.Arguments.Contains("squeeze-blank"))
+        squeezeBlank = true;
 
 } catch (Exception ex)
 {
@@ -65,7 +67,8 @@ foreach(string path in cm.Paths)
                 continue;
             else
                 lastEmpty = true;
-        lastEmpty = false;
+        else
+            lastEmpty = false;
 
         // Number lines
         if(number)

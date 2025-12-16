@@ -1,9 +1,7 @@
 {
   "profiles": {
     "cat": {
-      "commandName": "Project",
-      "commandLineArgs": "index.htm",
-      "workingDirectory": "C:\\Users\\Runar\\kodehode\\kartlegging\\my-first-code"
+      "commandName": "Project"
     }
   }
 }
