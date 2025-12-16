@@ -5,8 +5,13 @@ It contain a class for parsing arguments; CommandLineArguments.
 The shell manipulates the commandline argument before it's sent to dotnet and
 made available in args. This creates a lot of inconsistencies 
 
+## How to run
+Use `dotnet run --` from project foldrer instead of name of program.
 
 ## echo
+Some echos seperate on space and put each on its own line,
+but this works like echo in Git Bash so the whole text on one line.
+
 Use: echo [-nh] output
 
 h display help
