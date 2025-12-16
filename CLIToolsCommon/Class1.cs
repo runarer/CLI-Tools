@@ -1,5 +1,4 @@
-﻿using System.Text;
-
+﻿
 namespace CLIToolsCommon;
 
 public class CommandLineArguments
@@ -19,10 +18,14 @@ public class CommandLineArguments
             {
                 if(arg.Length == 2)
                     throw new Exception("-- lacks an argument");
+                // arg[2..] for skipping the --
                 if(_allowedArguments.Values.Contains(arg[2..]))
                 {
                     if(Arguments.Contains(arg[2..])) {
-                        char value = _allowedArguments.First( v => v.Value == arg).Key;
+                        // An attempt for a more helpful error message
+                        // Find the short form for the long form
+                        // so if it has been used we can tell the user
+                        char value = _allowedArguments.First( v => v.Value == arg).Key; 
                         throw new Exception($"Argument {arg} already used, another --{arg} or  -{value} ");
                     }
                    Arguments.Add(arg[2..]); 
@@ -47,9 +50,7 @@ public class CommandLineArguments
                     if(Arguments.Contains(_allowedArguments[a]))
                         throw new Exception($"Argument {a} in {arg} already use, --{_allowedArguments[a]} or another -{a} ");
                     Arguments.Add(_allowedArguments[a]);
-                }
-                
-    
+                }   
             }
             else
             {
