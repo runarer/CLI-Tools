@@ -27,8 +27,9 @@ if(args.Length > 0)
 
 string dir = Directory.GetCurrentDirectory();
 
+// if it's a link and we want physical, resolve it
 if(physical) {
-    FileSystemInfo?  fileInfo = Directory.ResolveLinkTarget(dir,physical);
+    FileSystemInfo? fileInfo = Directory.ResolveLinkTarget(dir,physical);
 
     if(fileInfo == null)
     {
