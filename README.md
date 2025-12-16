@@ -8,6 +8,19 @@ made available in args. This creates a lot of inconsistencies
 ## How to run
 Use `dotnet run --` from project foldrer instead of name of program.
 
+## Possible improvements
+First improvement would be to use something like the System.CommandLine NuGet 
+package from Microsoft to handle the argument parsing.
+
+
+Another improvement could be to add colour and icons to the output. There are
+packages that can make this easier, like Specter.Console and Terminal.GUI. The
+first one probably the best match for small CLI programs without much imput.
+
+
+For a program like `ls` there are a lot of options for showing information
+about files.
+
 ## echo
 Some echos seperate on space and put each on its own line,
 but this works like echo in Git Bash so the whole text on one line.
