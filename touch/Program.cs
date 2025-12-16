@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.Design;
-using CLIToolsCommon;
+﻿using CLIToolsCommon;
 
+// Wrong usage
 if(args.Length == 0)
 {
     Usage();
     return 0;
 }
 
+// Parse the commandline argument
 CommandLineArguments cm;
 try
 {
@@ -18,6 +19,7 @@ try
     return 1;
 }
 
+// if user ask for help menu, display and exit
 if(cm.Arguments.Contains("help"))
 {
     Help();
@@ -26,11 +28,13 @@ if(cm.Arguments.Contains("help"))
 
 int error = 0;
 
+// Try to create all files, if some fails display error message
+// but continue to create
 foreach(string path in cm.Paths) {
     if(File.Exists(path))
     {
         Console.WriteLine($"File {path} allready Exisit");
-        error = 1;
+        error += 1;
         continue;
     }
 
@@ -40,7 +44,7 @@ foreach(string path in cm.Paths) {
     } catch (Exception ex)
     {
         Console.WriteLine(ex.Message);
-        error = 2;
+        error += 100;
         continue;
     }
 }
